@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.mentoring</groupId>
-    <artifactId>module2</artifactId>
+    <artifactId>module3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>module2</name>
+    <name>module3</name>
     <description>Spring modules</description>
     <properties>
         <java.version>16</java.version>
@@ -60,8 +60,8 @@
             <artifactId>spring-oxm</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.batch</groupId>
-            <artifactId>spring-batch-core</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
         </dependency>
 
         <dependency>
