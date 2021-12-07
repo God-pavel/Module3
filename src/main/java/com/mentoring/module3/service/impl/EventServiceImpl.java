@@ -2,7 +2,7 @@ package com.mentoring.module3.service.impl;
 
 import com.mentoring.module3.dto.EventDto;
 import com.mentoring.module3.model.impl.Event;
-import com.mentoring.module3.repository.EventDAO;
+import com.mentoring.module3.repository.EventRepository;
 import com.mentoring.module3.service.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import java.util.List;
 public class EventServiceImpl implements EventService {
 
     @Autowired
-    private EventDAO eventDAO;
+    private EventRepository eventRepository;
 
     private static final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -26,18 +26,18 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event getEventById(final long eventId) {
-        return eventDAO.findById(eventId).orElse(null);
+        return eventRepository.findById(eventId).orElse(null);
     }
 
     @Override
     public List<Event> getEventsByTitle(final String title, final int pageSize, final int pageNum) {
-        return eventDAO.findAllByTitleContains(title, PageRequest.of(pageNum, pageSize));
+        return eventRepository.findAllByTitleContains(title, PageRequest.of(pageNum, pageSize));
     }
 
     @Override
     public List<Event> getEventsForDay(final String day, final int pageSize, final int pageNum) {
         try {
-            return eventDAO.findAllByDate(format.parse(day), PageRequest.of(pageNum, pageSize));
+            return eventRepository.findAllByDate(format.parse(day), PageRequest.of(pageNum, pageSize));
         } catch (ParseException e) {
             return null;
         }
@@ -47,7 +47,7 @@ public class EventServiceImpl implements EventService {
     public Event createEvent(final EventDto event) {
         LOGGER.info("Creating event {}", event.getTitle());
         try {
-            return eventDAO.save(convertToEvent(event));
+            return eventRepository.save(convertToEvent(event));
         } catch (ParseException e) {
             LOGGER.warn("Date conversion failed event {}", event.getTitle());
             return null;
@@ -57,21 +57,21 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event updateEvent(final EventDto event) {
         LOGGER.info("Updating event with id {}", event.getId());
-        final Event updatedEvent = eventDAO.findById(event.getId()).orElseThrow(IllegalArgumentException::new);
+        final Event updatedEvent = eventRepository.findById(event.getId()).orElseThrow(IllegalArgumentException::new);
         try {
             updatedEvent.setDate(format.parse(event.getDate()));
         } catch (ParseException e) {
             return null;
         }
         updatedEvent.setTitle(event.getTitle());
-        return eventDAO.save(updatedEvent);
+        return eventRepository.save(updatedEvent);
     }
 
     @Override
     public boolean deleteEvent(final long eventId) {
         LOGGER.info("Deleting event with id {}", eventId);
         try {
-            eventDAO.deleteById(eventId);
+            eventRepository.deleteById(eventId);
         } catch (Exception e) {
             return false;
         }

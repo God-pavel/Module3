@@ -8,15 +8,9 @@ import com.mentoring.module3.model.impl.User;
 import com.mentoring.module3.service.EventService;
 import com.mentoring.module3.service.TicketService;
 import com.mentoring.module3.service.UserService;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 @Service

@@ -3,7 +3,7 @@ package com.mentoring.module3.service.impl;
 import com.mentoring.module3.model.impl.Event;
 import com.mentoring.module3.model.impl.Ticket;
 import com.mentoring.module3.model.impl.User;
-import com.mentoring.module3.repository.TicketDAO;
+import com.mentoring.module3.repository.TicketRepository;
 import com.mentoring.module3.service.EventService;
 import com.mentoring.module3.service.TicketService;
 import com.mentoring.module3.service.UserService;
@@ -22,7 +22,7 @@ import java.util.List;
 public class TicketServiceImpl implements TicketService {
 
     @Autowired
-    private TicketDAO ticketDAO;
+    private TicketRepository ticketRepository;
     @Autowired
     private EventService eventService;
     @Autowired
@@ -54,7 +54,7 @@ public class TicketServiceImpl implements TicketService {
         userService.updateUser(user);
 
         LOGGER.info("Booking ticket for {}", userId);
-        return ticketDAO.save(Ticket.builder()
+        return ticketRepository.save(Ticket.builder()
                 .user(user)
                 .event(event)
                 .category(category)
@@ -65,19 +65,19 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getBookedTickets(final User user, final int pageSize, final int pageNum) {
-        return ticketDAO.findAllByUser(user, PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.DESC, "event.date")));
+        return ticketRepository.findAllByUser(user, PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.DESC, "event.date")));
     }
 
     @Override
     public List<Ticket> getBookedTickets(final Event event, final int pageSize, final int pageNum) {
-        return ticketDAO.findAllByEvent(event, PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.ASC, "user.email")));
+        return ticketRepository.findAllByEvent(event, PageRequest.of(pageNum, pageSize, Sort.by(Sort.Direction.ASC, "user.email")));
     }
 
     @Override
     public boolean cancelTicket(final long ticketId) {
         LOGGER.info("Canceling ticket with id {}", ticketId);
         try {
-            ticketDAO.deleteById(ticketId);
+            ticketRepository.deleteById(ticketId);
         } catch (Exception e) {
             return false;
         }
@@ -85,7 +85,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     private boolean isPlaceBooked(final int place, final long eventId) {
-        return ticketDAO.existsByEventIdAndPlace(eventId, place);
+        return ticketRepository.existsByEventIdAndPlace(eventId, place);
     }
 
     private boolean isEnoughMoney(final BigDecimal money, final BigDecimal price) {

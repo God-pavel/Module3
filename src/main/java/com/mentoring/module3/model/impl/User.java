@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @ToString
-//TODO check naming
-@Entity(name = "users")
+@Entity(name = "user")
 public class User {
 
     @Id
@@ -22,7 +21,6 @@ public class User {
     private String name;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
-    //Todo check structure
     @Column(name = "money_amount", nullable = false)
     private BigDecimal moneyAmount;
 }

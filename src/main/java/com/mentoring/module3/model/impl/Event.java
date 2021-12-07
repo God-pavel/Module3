@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @ToString
-@Entity(name = "events")
+@Entity(name = "event")
 public class Event {
 
     @Id

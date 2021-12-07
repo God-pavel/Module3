@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @ToString
-@Entity(name = "tickets")
+@Entity(name = "ticket")
 public class Ticket {
 
     public enum Category {STANDARD, PREMIUM, BAR}
@@ -24,7 +24,7 @@ public class Ticket {
     @JoinColumn(name = "users_id")
     private User user;
     //TODO check FetchType
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "events_id")
     private Event event;
 
