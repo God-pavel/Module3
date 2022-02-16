@@ -11,6 +11,14 @@ public class TicketDto {
     private int place;
     private long price;
 
+    public TicketDto(long userId, long eventId, String category, int place, long price) {
+        this.userId = userId;
+        this.eventId = eventId;
+        this.category = category;
+        this.place = place;
+        this.price = price;
+    }
+
     public long getUserId() {
         return userId;
     }
@@ -49,5 +57,16 @@ public class TicketDto {
 
     public void setPrice(long price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "TicketDto{" +
+                "userId=" + userId +
+                ", eventId=" + eventId +
+                ", category='" + category + '\'' +
+                ", place=" + place +
+                ", price=" + price +
+                '}';
     }
 }

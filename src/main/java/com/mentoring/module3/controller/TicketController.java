@@ -11,7 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -27,9 +33,8 @@ public class TicketController {
     private static final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
     @PostMapping
-    public Ticket bookTicket(final TicketDto ticketDto) {
-        return bookingFacade.bookTicket(ticketDto.getUserId(), ticketDto.getEventId(), ticketDto.getPlace(),
-                Ticket.Category.valueOf(ticketDto.getCategory()), BigDecimal.valueOf(ticketDto.getPrice()));
+    public Ticket bookTicket(final TicketDto ticket) {
+        return bookingFacade.bookTicket(ticket);
     }
 
     @GetMapping(params = {"id", "name", "email", "size", "number"})
@@ -53,7 +58,7 @@ public class TicketController {
     @GetMapping(params = {"id", "title", "date", "size", "number"})
     public List<Ticket> getBookedTickets(final EventDto eventDto,
                                          @RequestParam("size") final int size,
-                                         @RequestParam("number") final int number) throws Exception{
+                                         @RequestParam("number") final int number) throws Exception {
         return bookingFacade.getBookedTickets(Event.builder().id(eventDto.getId()).title(eventDto.getTitle()).date(format.parse(eventDto.getDate())).build(), size, number);
     }
 

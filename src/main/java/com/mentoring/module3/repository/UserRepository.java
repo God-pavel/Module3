@@ -1,6 +1,5 @@
 package com.mentoring.module3.repository;
 
-import com.mentoring.module3.model.impl.Event;
 import com.mentoring.module3.model.impl.User;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;

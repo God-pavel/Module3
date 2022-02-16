@@ -1,12 +1,11 @@
 package com.mentoring.module3.facade;
 
 import com.mentoring.module3.dto.EventDto;
+import com.mentoring.module3.dto.TicketDto;
 import com.mentoring.module3.model.impl.Event;
 import com.mentoring.module3.model.impl.Ticket;
 import com.mentoring.module3.model.impl.User;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 
@@ -128,7 +127,7 @@ public interface BookingFacade {
      * @return Booked ticket object.
      * @throws IllegalStateException if this place has already been booked.
      */
-    Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category, BigDecimal price);
+    Ticket bookTicket(TicketDto ticket);
 
     /**
      * Get all booked tickets for specified user. Tickets should be sorted by event date in descending order.

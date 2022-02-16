@@ -39,7 +39,6 @@ public class EventController {
         return bookingFacade.createEvent(event);
     }
 
-    //todo check mapping type
     @PutMapping("/{id}")
     public Event updateEvent(final EventDto event) {
         return bookingFacade.updateEvent(event);

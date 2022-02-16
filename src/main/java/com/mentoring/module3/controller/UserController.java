@@ -3,8 +3,13 @@ package com.mentoring.module3.controller;
 import com.mentoring.module3.facade.BookingFacade;
 import com.mentoring.module3.model.impl.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,10 +22,8 @@ public class UserController {
     private BookingFacade bookingFacade;
 
     @GetMapping("/{id}")
-    public ModelAndView getUserById(@PathVariable("id") final long id) {
-        final ModelAndView modelAndView = new ModelAndView("users");
-        modelAndView.addObject("users", List.of(bookingFacade.getUserById(id)));
-        return modelAndView;
+    public User getUserById(@PathVariable("id") final long id) {
+        return bookingFacade.getUserById(id);
     }
 
     @GetMapping(params = {"email"})
@@ -29,13 +32,10 @@ public class UserController {
     }
 
     @GetMapping(params = {"name", "size", "number"})
-    public ModelAndView getUsersByName(@RequestParam("name") final String name,
-                                       @RequestParam("size") final int size,
-                                       @RequestParam("number") final int number) {
-        final ModelAndView modelAndView = new ModelAndView("users");
-        final List<User> users = bookingFacade.getUsersByName(name, size, number);
-        modelAndView.addObject("users", users);
-        return modelAndView;
+    public List<User> getUsersByName(@RequestParam("name") final String name,
+                                     @RequestParam("size") final int size,
+                                     @RequestParam("number") final int number) {
+        return bookingFacade.getUsersByName(name, size, number);
     }
 
     @PostMapping

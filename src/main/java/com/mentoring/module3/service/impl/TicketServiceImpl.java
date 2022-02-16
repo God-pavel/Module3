@@ -1,5 +1,6 @@
 package com.mentoring.module3.service.impl;
 
+import com.mentoring.module3.dto.TicketDto;
 import com.mentoring.module3.model.impl.Event;
 import com.mentoring.module3.model.impl.Ticket;
 import com.mentoring.module3.model.impl.User;
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -32,34 +35,30 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     @Transactional
-    public Ticket bookTicket(final long userId,
-                             final long eventId,
-                             final int place,
-                             final Ticket.Category category,
-                             final BigDecimal price) {
-        if (isPlaceBooked(place, eventId)) {
-            LOGGER.warn("Place {} already booked", place);
+    public Ticket bookTicket(final TicketDto ticket) {
+        if (isPlaceBooked(ticket.getPlace(), ticket.getEventId())) {
+            LOGGER.warn("Place {} already booked", ticket.getPlace());
             throw new IllegalStateException();
         }
 
-        final User user = userService.getUserById(userId);
-        final Event event = eventService.getEventById(eventId);
+        final User user = userService.getUserById(ticket.getUserId());
+        final Event event = eventService.getEventById(ticket.getEventId());
 
-        if (!isEnoughMoney(user.getMoneyAmount(), price)) {
+        if (!isEnoughMoney(user.getMoneyAmount(), BigDecimal.valueOf(ticket.getPrice()))) {
             LOGGER.warn("Not enough money");
             throw new IllegalStateException();
         }
 
-        user.setMoneyAmount(user.getMoneyAmount().subtract(price));
+        user.setMoneyAmount(user.getMoneyAmount().subtract(BigDecimal.valueOf(ticket.getPrice())));
         userService.updateUser(user);
 
-        LOGGER.info("Booking ticket for {}", userId);
+        LOGGER.info("Booking ticket for {}", ticket.getUserId());
         return ticketRepository.save(Ticket.builder()
                 .user(user)
                 .event(event)
-                .category(category)
-                .place(place)
-                .price(price)
+                .category(Ticket.Category.valueOf(ticket.getCategory()))
+                .place(ticket.getPlace())
+                .price(BigDecimal.valueOf(ticket.getPrice()))
                 .build());
     }
 

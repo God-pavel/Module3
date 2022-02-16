@@ -1,6 +1,7 @@
 package com.mentoring.module3.facade.impl;
 
 import com.mentoring.module3.dto.EventDto;
+import com.mentoring.module3.dto.TicketDto;
 import com.mentoring.module3.facade.BookingFacade;
 import com.mentoring.module3.model.impl.Event;
 import com.mentoring.module3.model.impl.Ticket;
@@ -10,6 +11,7 @@ import com.mentoring.module3.service.TicketService;
 import com.mentoring.module3.service.UserService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -26,6 +28,14 @@ public class BookingFacadeImpl implements BookingFacade {
         this.eventService = eventService;
         this.ticketService = ticketService;
         this.userService = userService;
+    }
+
+    @PostConstruct
+    public void initializeDB() {
+        if (userService.getUserById(1) == null && eventService.getEventById(1) == null) {
+            userService.createUser(User.builder().name("user1").email("email1").moneyAmount(BigDecimal.TEN).build());
+            eventService.createEvent(EventDto.builder().title("event1").date("10-10-2022").build());
+        }
     }
 
 
@@ -90,12 +100,8 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public Ticket bookTicket(final long userId,
-                             final long eventId,
-                             final int place,
-                             final Ticket.Category category,
-                             final BigDecimal price) {
-        return ticketService.bookTicket(userId, eventId, place, category, price);
+    public Ticket bookTicket(final TicketDto ticket) {
+        return ticketService.bookTicket(ticket);
     }
 
     @Override
